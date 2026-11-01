@@ -129,9 +129,6 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     const exe = b.addExecutable(.{ .name = "amtui", .root_module = exe_mod });
-    // paths.zig 在 POSIX 用 libc getenv（Windows 走 kernel32 extern）——
-    // extern "c" 依赖必须显式声明，否则非 Windows 目标编译报错
-    if (target.result.os.tag != .windows) exe_mod.link_libc = true;
 
     const zigzag = b.dependency("zigzag", .{
         .target = target,

@@ -27,6 +27,10 @@ pub fn main(init: std.process.Init) !void {
         if (std.mem.eql(u8, s, "snap")) return snap(init, &args_it);
     }
 
+    // auth.json 用户目录定位需要 env（APPDATA/HOME/XDG）——库模块不自带
+    // 平台 extern，env 统一由入口注入
+    @import("core/paths.zig").setEnviron(init.environ_map);
+
     // 音源选择：AM_BACKEND=bodian|netease|qq|mock（默认 netease，匿名即全功能）；
     // 外部歌词/状态接口：AM_API_PORT（默认 8790，0=关闭，只绑 127.0.0.1）
     // 封面方格比例：先 ioctl 实测终端像素尺寸，AM_CELL_RATIO 手动覆盖

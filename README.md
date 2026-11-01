@@ -143,6 +143,14 @@ zig build smtcsmoke               # SMTC 媒体键全链路（仅 Windows，Send
 
 `ui/mock.zig` + `testdata/mock/` 是**离线测试夹具**（单元测试与 `amtui snap` 截帧工具依赖），运行时真实音源不经过它。
 
-## 许可证
+## 许可证与致谢
 
-**AGPL-3.0**。本项目移植自 [bodian-music-api](https://www.npmjs.com/package/bodian-music-api)（AGPL-3.0，源自 Folia），QQ 扫码协议参考了 [HM2899/qq-music-tui](https://github.com/HM2899/qq-music-tui)（GPL-3.0，按接口协议重写，未逐行移植）。开源发布需随附源码并保留上游署名；本项目不附带任何音乐平台的官方许可，仅供学习协议实现使用。
+**AGPL-3.0**。本项目仅供学习音乐平台协议实现使用，不附带任何音乐平台的官方许可。
+
+协议实现的参考来源（按接口协议重写，未逐行移植）：
+
+- **QQ 音乐扫码/点歌协议**：参考 [Viemean/qmtui](https://github.com/Viemean/qmtui)
+- **网易云音乐加密链路（weapi/eapi）与扫码登录**：参考 [go-musicfox/go-musicfox](https://github.com/go-musicfox/go-musicfox)
+- **波点音乐接口**：移植自 [bodian-music-api](https://www.npmjs.com/package/bodian-music-api)（AGPL-3.0，源自 Folia）
+
+按 AGPL-3.0 要求，开源发布随附完整源码并保留上述上游项目署名。
