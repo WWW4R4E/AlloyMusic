@@ -16,17 +16,26 @@ jobs:
         include:
           - os: windows-latest
             artifact: alloy-music-x86_64-windows.zip
-            exe: amtui.exe
           - os: ubuntu-latest
             artifact: alloy-music-x86_64-linux.tar.gz
-            exe: amtui
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
 
-      - uses: mlugg/setup-zig@v1
-        with:
-          version: 0.17.0
+      # 官方源直装（第三方 action 的镜像对 0.17 不稳定）
+      - name: install zig (windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Invoke-WebRequest https://ziglang.org/download/0.17.0/zig-x86_64-windows-0.17.0.zip -OutFile zig.zip
+          Expand-Archive zig.zip -DestinationPath .
+          Add-Content $env:GITHUB_PATH "$(Get-Location)\zig-x86_64-windows-0.17.0"
+
+      - name: install zig (linux)
+        if: runner.os == 'Linux'
+        run: |
+          curl -fsSL https://ziglang.org/download/0.17.0/zig-x86_64-linux-0.17.0.tar.xz | tar -xJ
+          echo "$(pwd)/zig-x86_64-linux-0.17.0" >> "$GITHUB_PATH"
 
       # 依赖（zigzag）由 build.zig.zon 的 URL+hash 联网拉取，无需本机缓存
       - name: build (release)
