@@ -1,0 +1,14 @@
+name: tbd
+on:
+  workflow_dispatch:
+
+jobs:
+  extract:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+      - run: bash scripts/extract_tbd.sh
+      - uses: actions/upload-artifact@v7
+        with:
+          name: macos-frameworks-tbd
+          path: macos-frameworks-tbd.tar.gz
