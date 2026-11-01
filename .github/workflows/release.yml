@@ -18,6 +18,8 @@ jobs:
             artifact: alloy-music-x86_64-windows.zip
           - os: ubuntu-24.04
             artifact: alloy-music-x86_64-linux.tar.gz
+          - os: macos-15
+            artifact: alloy-music-aarch64-macos.tar.gz
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
@@ -37,6 +39,12 @@ jobs:
           curl -fsSL https://ziglang.org/download/0.17.0/zig-x86_64-linux-0.17.0.tar.xz | tar -xJ
           echo "$(pwd)/zig-x86_64-linux-0.17.0" >> "$GITHUB_PATH"
 
+      - name: install zig (macos)
+        if: runner.os == 'macOS'
+        run: |
+          curl -fsSL https://ziglang.org/download/0.17.0/zig-aarch64-macos-0.17.0.tar.xz | tar -xJ
+          echo "$(pwd)/zig-aarch64-macos-0.17.0" >> "$GITHUB_PATH"
+
       # 依赖（zigzag）由 build.zig.zon 的 URL+hash 联网拉取，无需本机缓存
       - name: build (release)
         run: zig build -Doptimize=fast
@@ -50,6 +58,12 @@ jobs:
 
       - name: package (linux)
         if: runner.os == 'Linux'
+        run: |
+          mkdir dist
+          tar -czf dist/${{ matrix.artifact }} -C zig-out/bin amtui
+
+      - name: package (macos)
+        if: runner.os == 'macOS'
         run: |
           mkdir dist
           tar -czf dist/${{ matrix.artifact }} -C zig-out/bin amtui
