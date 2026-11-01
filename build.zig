@@ -119,6 +119,10 @@ fn smokeStep(
 pub fn build(b: *std.Build) void {
     const target = b.standardTargetOptions(.{});
     const optimize = b.standardOptimizeOption(.{});
+    // release 去符号：debug/symbol 信息才是体积大头（ELF 尤甚），去掉后
+    // fast 与 small 的产物差距缩到几百 KB；崩溃栈回溯不再可用——发布版
+    // 用户给不出有用的栈，交给日志/复现路径
+    const strip = optimize == .fast or optimize == .small;
 
     // relay 嵌入：Windows 目标编译 C# 并生成字面量，其他目标生成空桩。
     // 必须在任何引用 relay_embed 的模块编译前做。
@@ -134,6 +138,7 @@ pub fn build(b: *std.Build) void {
         .target = target,
         .optimize = optimize,
     });
+    exe_mod.strip = strip;
     exe_mod.addImport("zigzag", zigzag.module("zigzag"));
 
     b.installArtifact(exe);
