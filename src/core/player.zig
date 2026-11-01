@@ -3,6 +3,7 @@ const builtin = @import("builtin");
 const Allocator = std.mem.Allocator;
 const mpv_mod = @import("mpv.zig");
 const mf_mod = @import("mf.zig");
+const smtc_mod = @import("smtc.zig");
 
 // src/core/player.zig — 播放后端派发层：暴露统一 API，按平台编译期定死后端，
 // 无运行时探测/降级链。
@@ -25,6 +26,9 @@ pub const MediaButton = mf_mod.MediaButton;
 pub const Player = struct {
     mpv: mpv_mod.Player,
     mf: mf_mod.Player,
+    smtc: smtc_mod.Impl = .{}, // macOS：进程内 Now Playing；windows 走 mf 内的；恒不重复 attach
+    gpa: Allocator = undefined, // mac smtc attach 用（posix init 时存）
+    io: std.Io = undefined,
     kind: Kind = .none,
 
     pub fn init(gpa: Allocator, io: std.Io) Player {
@@ -38,6 +42,9 @@ pub const Player = struct {
         return .{
             .mpv = mpv_mod.Player.init(gpa, io),
             .mf = mf_mod.Player.init(gpa), // stub，零分析
+            .smtc = .{}, // macOS：Now Playing 会话（attach 于 startAsync 成功后）
+            .gpa = gpa,
+            .io = io,
             .kind = .none,
         };
     }
@@ -47,6 +54,7 @@ pub const Player = struct {
             self.mf.deinit();
             return;
         }
+        if (comptime builtin.os.tag == .macos) self.smtc.detach();
         self.mpv.deinit();
         self.mf.deinit();
     }
@@ -100,6 +108,7 @@ pub const Player = struct {
         }
         if (self.mpv.startAsync()) {
             self.kind = .mpv;
+            if (comptime builtin.os.tag == .macos) self.smtc.attach(self.gpa, self.io);
             return true;
         }
         return false;
@@ -120,11 +129,14 @@ pub const Player = struct {
     }
 
     pub fn loadFile(self: *Player, url: []const u8, title: []const u8) bool {
-        return switch (self.kind) {
+        const ok = switch (self.kind) {
             .none => false,
             .mpv => self.mpv.loadFile(url, title),
             .mf => self.mf.loadFile(url, title),
         };
+        // macOS：loadFile 的 " - " 拆分先上（随后 app 的 setSmtcMeta 全量覆盖）
+        if (ok and comptime builtin.os.tag == .macos) self.smtc.setTrack(title);
+        return ok;
     }
 
     pub fn appendFile(self: *Player, url: []const u8, title: []const u8) bool {
@@ -138,7 +150,9 @@ pub const Player = struct {
     /// mpv 自己的 MPRIS 通路，none 无后端。app 在 loadFile 成功后调用。
     pub fn setSmtcMeta(self: *Player, title: []const u8, artist: []const u8, album: []const u8, cover_url: []const u8) void {
         switch (self.kind) {
-            .none, .mpv => {},
+            .none => {},
+            // macOS：进程内 Now Playing；linux mpv 走 mpv 自带 MPRIS
+            .mpv => if (comptime builtin.os.tag == .macos) self.smtc.setTrackMeta(title, artist, album, cover_url),
             .mf => self.mf.setSmtcMeta(title, artist, album, cover_url),
         }
     }
@@ -146,7 +160,10 @@ pub const Player = struct {
     pub fn setPause(self: *Player, paused: bool) void {
         switch (self.kind) {
             .none => {},
-            .mpv => self.mpv.setPause(paused),
+            .mpv => {
+                self.mpv.setPause(paused);
+                if (comptime builtin.os.tag == .macos) self.smtc.setPaused(paused);
+            },
             .mf => self.mf.setPause(paused),
         }
     }
@@ -216,7 +233,14 @@ pub const Player = struct {
     pub fn drain(self: *Player, out_pos: *?i64, out_pause: *?bool) void {
         switch (self.kind) {
             .none => {},
-            .mpv => self.mpv.drain(out_pos, out_pause),
+            .mpv => {
+                self.mpv.drain(out_pos, out_pause);
+                // macOS：时间线喂 Now Playing（smtc.pump 内部 500ms 节流；
+                // pos 用 status 缓存——drain 的 out_pos 只在事件时才有值）
+                if (comptime builtin.os.tag == .macos) {
+                    if (self.mpv.status()) |st| self.smtc.pump(st.position_s, st.duration_s);
+                }
+            },
             .mf => self.mf.drain(out_pos, out_pause),
         }
     }
@@ -225,7 +249,8 @@ pub const Player = struct {
     /// app 侧映射：play_pause → togglePlay，next/prev → nextSong/prevSong。
     pub fn takeMediaButton(self: *Player) ?MediaButton {
         return switch (self.kind) {
-            .none, .mpv => null,
+            .none => null,
+            .mpv => if (comptime builtin.os.tag == .macos) self.smtc.takeButton() else null,
             .mf => self.mf.takeMediaButton(),
         };
     }

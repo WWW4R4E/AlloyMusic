@@ -140,6 +140,13 @@ pub fn build(b: *std.Build) void {
     });
     exe_mod.strip = strip;
     exe_mod.addImport("zigzag", zigzag.module("zigzag"));
+    // macOS：SMTC 进程内 Now Playing——MediaPlayer framework（.tbd 桩
+    // vendor 进仓库，zig 只捆 libSystem；抽取脚本 scripts/extract_tbd.sh）
+    if (target.result.os.tag == .macos) {
+        exe_mod.addFrameworkPath(b.path("vendor/Frameworks"));
+        exe_mod.linkFramework("MediaPlayer", .{});
+        exe_mod.addObjectFile(b.path("vendor/Frameworks/libobjc.tbd"));
+    }
 
     b.installArtifact(exe);
     // `zig build run`：直接启动 TUI（三源已纯 Zig 直调，无 Node sidecar）

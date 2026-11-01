@@ -1,5 +1,6 @@
 const std = @import("std");
 const builtin = @import("builtin");
+const smtc_mac = @import("smtc_mac.zig");
 
 // src/core/smtc.zig — Windows System Media Transport Controls（系统媒体集成）。
 //
@@ -71,7 +72,7 @@ const builtin = @import("builtin");
 //   时间线更新、热键注册、消息泵）；主线程经请求槽 + PostMessage 投递。
 //   两模式进程内单实例（请求槽与标志都是文件级全局）。
 
-pub const supported = builtin.os.tag == .windows;
+pub const supported = builtin.os.tag == .windows or builtin.os.tag == .macos;
 
 /// 媒体键语义（player.zig 原样转出；app.zig 映射到动作）。
 pub const MediaButton = enum(u8) {
@@ -438,6 +439,8 @@ fn createHostWindow() ?*anyopaque {
 /// WM_HOTKEY id → 位标志（bit1=播放/暂停 bit2=下一首 bit4=上一首）。
 /// 进程内单实例：标志是文件级全局，STA 泵线程写、主线程 swap 读。
 var g_btn_flags = std.atomic.Value(u32).init(0);
+/// macOS 路径的媒体键位标志（smtc_mac.zig 远程命令回调写入）
+pub const g_btn_flags_pub = &g_btn_flags;
 
 const HotkeyDef = struct { id: i32, vk: u32, bit: u32, name: []const u8 };
 const hotkeys = [_]HotkeyDef{
@@ -1653,7 +1656,48 @@ pub const UnsupportedSession = struct {
     }
 };
 
-pub const Impl = if (supported) Session else UnsupportedSession;
+/// Windows：relay 中转（MC.dll fire UAF，必须子进程）；macOS：进程内
+/// Now Playing（无 UAF，objc_msgSend 直调）；其余平台 UnsupportedSession。
+/// macOS 会话：方法面与 Session 对齐，转发到 smtc_mac 的自由函数。
+/// 线程模型不同（worker 轮请求槽 vs STA 泵），对上层透明。
+pub const MacSession = struct {
+    pub fn attach(self: *MacSession, gpa: std.mem.Allocator, io: std.Io) void {
+        _ = self;
+        _ = gpa;
+        smtc_mac.attach(io);
+    }
+    pub fn detach(self: *MacSession) void {
+        _ = self;
+        smtc_mac.detach();
+    }
+    pub fn setTrack(self: *MacSession, title_artist: []const u8) void {
+        _ = self;
+        const cut = splitTitleArtist(title_artist);
+        smtc_mac.setTrackMeta(cut.title, cut.artist, "", "");
+    }
+    pub fn setTrackMeta(self: *MacSession, title: []const u8, artist: []const u8, album: []const u8, cover_url: []const u8) void {
+        _ = self;
+        smtc_mac.setTrackMeta(title, artist, album, cover_url);
+    }
+    pub fn setPaused(self: *MacSession, paused: bool) void {
+        _ = self;
+        smtc_mac.setPaused(paused);
+    }
+    pub fn pump(self: *MacSession, pos_s: f64, dur_s: f64) void {
+        _ = self;
+        smtc_mac.pump(pos_s, dur_s);
+    }
+    pub fn takeButton(self: *MacSession) ?MediaButton {
+        _ = self;
+        return smtc_mac.takeButton();
+    }
+};
+
+pub const Impl = switch (builtin.os.tag) {
+    .windows => Session,
+    .macos => MacSession,
+    else => UnsupportedSession,
+};
 
 // ────────────────────────── 测试 ──────────────────────────
 
