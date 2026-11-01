@@ -27,6 +27,6 @@ while [ -n "$queue" ]; do
     extracted="$extracted $fw"
   fi
 done
-tar -czf macos-frameworks-tbd.tar.gz -C out Frameworks
 cp "$SDK/usr/lib/libobjc.tbd" out/Frameworks/ 2>/dev/null || echo "skip libobjc.tbd"
+tar -czf macos-frameworks-tbd.tar.gz -C out Frameworks
 echo "done: $(find out -name "*.tbd" | wc -l | tr -d ' ') tbds"
