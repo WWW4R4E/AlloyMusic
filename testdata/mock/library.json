@@ -1,0 +1,23 @@
+{
+  "code": 200,
+  "data": {
+    "owned": {
+      "playLists": [
+        { "id": "300901", "name": "我的收藏", "sourceType": 5, "musicCount": 25 },
+        { "id": "300902", "name": "跑步专用", "sourceType": 5, "musicCount": 18 },
+        { "id": "300903", "name": "睡前白噪音", "sourceType": 5, "musicCount": 9 }
+      ]
+    },
+    "collected": {
+      "playLists": [
+        { "id": "100234", "name": "华语经典 | 岁月神偷，偷不走这些歌", "sourceType": 4, "musicCount": 120 },
+        { "id": "400911", "name": "梦游计", "sourceType": 6, "musicCount": 10 },
+        { "id": "100239", "name": "粤语留声机：黄金年代", "sourceType": 4, "musicCount": 98 },
+        { "id": "400912", "name": "范特西", "sourceType": 6, "musicCount": 10 },
+        { "id": "100242", "name": "KTV 必点金曲合集", "sourceType": 4, "musicCount": 150 },
+        { "id": "400913", "name": "后青春期的诗", "sourceType": 6, "musicCount": 11 },
+        { "id": "100240", "name": "开车必备：公路之歌", "sourceType": 4, "musicCount": 88 }
+      ]
+    }
+  }
+}

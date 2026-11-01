@@ -1,0 +1,29 @@
+{
+  "code": 200,
+  "data": {
+    "id": "100234",
+    "name": "华语经典 | 岁月神偷，偷不走这些歌",
+    "sourceType": 4,
+    "musicCount": 18,
+    "musicList": [
+      { "musicId": "968387", "name": "海阔天空", "artist": "Beyond", "album": "乐与怒", "duration": 326, "payInfo": "1" },
+      { "musicId": "623612", "name": "光辉岁月", "artist": "Beyond", "album": "命运派对", "duration": 305, "payInfo": "1" },
+      { "musicId": "623613", "name": "真的爱你", "artist": "Beyond", "album": "Beyond IV", "duration": 269 },
+      { "musicId": "623614", "name": "喜欢你", "artist": "Beyond", "album": "秘密警察", "duration": 261 },
+      { "musicId": "623615", "name": "不再犹豫", "artist": "Beyond", "album": "犹豫", "duration": 279, "payInfo": "1" },
+      { "musicId": "412356", "name": "晴天", "artist": "周杰伦", "album": "叶惠美", "duration": 269, "payInfo": "1" },
+      { "musicId": "412357", "name": "七里香", "artist": "周杰伦", "album": "七里香", "duration": 299, "payInfo": "1" },
+      { "musicId": "412360", "name": "青花瓷", "artist": "周杰伦", "album": "我很忙", "duration": 221 },
+      { "musicId": "712045", "name": "十年", "artist": "陈奕迅", "album": "黑白灰", "duration": 206, "payInfo": "1" },
+      { "musicId": "712046", "name": "富士山下", "artist": "陈奕迅", "album": "认了吧", "duration": 246, "payInfo": "1" },
+      { "musicId": "712047", "name": "好久不见", "artist": "陈奕迅", "album": "不想放手", "duration": 250 },
+      { "musicId": "528094", "name": "江南", "artist": "林俊杰", "album": "第二天堂", "duration": 269 },
+      { "musicId": "934814", "name": "知足", "artist": "五月天", "album": "知足", "duration": 271 },
+      { "musicId": "934813", "name": "突然好想你", "artist": "五月天", "album": "后青春期的诗", "duration": 258, "payInfo": "1" },
+      { "musicId": "665012", "name": "演员", "artist": "薛之谦", "album": "绅士", "duration": 270, "payInfo": "1" },
+      { "musicId": "778234", "name": "消愁", "artist": "毛不易", "album": "平凡的一天", "duration": 258, "payInfo": "1" },
+      { "musicId": "556012", "name": "成都", "artist": "赵雷", "album": "无法长大", "duration": 331 },
+      { "musicId": "823016", "name": "平凡之路", "artist": "朴树", "album": "猎户星座", "duration": 282 }
+    ]
+  }
+}

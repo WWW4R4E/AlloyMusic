@@ -1,0 +1,15 @@
+{
+  "code": 200,
+  "data": {
+    "list": [
+      { "id": "200101", "name": "潮趣日推 · 每天不重样", "sourceType": 4, "musicCount": 30 },
+      { "id": "200102", "name": "新歌速递 | 本周上架", "sourceType": 4, "musicCount": 50 },
+      { "id": "200103", "name": "热歌天花板 · 播放破亿", "sourceType": 4, "musicCount": 100 },
+      { "id": "200104", "name": "经典怀旧 | 90年代港乐", "sourceType": 4, "musicCount": 80 },
+      { "id": "200105", "name": "民谣拾光机", "sourceType": 4, "musicCount": 66 },
+      { "id": "200106", "name": "电子迷幻夜", "sourceType": 4, "musicCount": 42 },
+      { "id": "200107", "name": "ACG 次元壁突破", "sourceType": 4, "musicCount": 75 },
+      { "id": "200108", "name": "OST 影视原声精选", "sourceType": 4, "musicCount": 90 }
+    ]
+  }
+}

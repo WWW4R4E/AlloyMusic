@@ -1,0 +1,32 @@
+{
+  "code": 200,
+  "data": {
+    "total": 25,
+    "list": [
+      { "musicId": "968387", "name": "海阔天空", "artist": "Beyond", "album": "乐与怒", "duration": 326, "payInfo": "1" },
+      { "musicId": "623613", "name": "真的爱你", "artist": "Beyond", "album": "Beyond IV", "duration": 269 },
+      { "musicId": "623614", "name": "喜欢你", "artist": "Beyond", "album": "秘密警察", "duration": 261 },
+      { "musicId": "412356", "name": "晴天", "artist": "周杰伦", "album": "叶惠美", "duration": 269, "payInfo": "1" },
+      { "musicId": "412360", "name": "青花瓷", "artist": "周杰伦", "album": "我很忙", "duration": 221 },
+      { "musicId": "412362", "name": "枫", "artist": "周杰伦", "album": "十一月的萧邦", "duration": 265 },
+      { "musicId": "712046", "name": "富士山下", "artist": "陈奕迅", "album": "认了吧", "duration": 246, "payInfo": "1" },
+      { "musicId": "712047", "name": "好久不见", "artist": "陈奕迅", "album": "不想放手", "duration": 250 },
+      { "musicId": "528094", "name": "江南", "artist": "林俊杰", "album": "第二天堂", "duration": 269 },
+      { "musicId": "528098", "name": "她说", "artist": "林俊杰", "album": "她说", "duration": 268 },
+      { "musicId": "934813", "name": "突然好想你", "artist": "五月天", "album": "后青春期的诗", "duration": 258, "payInfo": "1" },
+      { "musicId": "934815", "name": "温柔", "artist": "五月天", "album": "爱情万岁", "duration": 269 },
+      { "musicId": "381204", "name": "光年之外", "artist": "邓紫棋", "album": "光年之外", "duration": 235, "payInfo": "1" },
+      { "musicId": "381205", "name": "泡沫", "artist": "邓紫棋", "album": "Xposed", "duration": 253 },
+      { "musicId": "201945", "name": "模特", "artist": "李荣浩", "album": "模特", "duration": 277 },
+      { "musicId": "201948", "name": "麻雀", "artist": "李荣浩", "album": "麻雀", "duration": 251 },
+      { "musicId": "665012", "name": "演员", "artist": "薛之谦", "album": "绅士", "duration": 270, "payInfo": "1" },
+      { "musicId": "665014", "name": "像风一样", "artist": "薛之谦", "album": "渡", "duration": 261 },
+      { "musicId": "778235", "name": "像我这样的人", "artist": "毛不易", "album": "平凡的一天", "duration": 226 },
+      { "musicId": "778236", "name": "一荤一素", "artist": "毛不易", "album": "平凡的一天", "duration": 251 },
+      { "musicId": "556012", "name": "成都", "artist": "赵雷", "album": "无法长大", "duration": 331 },
+      { "musicId": "556013", "name": "南方姑娘", "artist": "赵雷", "album": "赵小雷", "duration": 305 },
+      { "musicId": "823016", "name": "平凡之路", "artist": "朴树", "album": "猎户星座", "duration": 282 },
+      { "musicId": "823017", "name": "那些花儿", "artist": "朴树", "album": "我去2000年", "duration": 268 }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "code": 200,
+  "data": {
+    "playLists": [
+      { "id": "100234", "name": "华语经典 | 岁月神偷，偷不走这些歌", "sourceType": 4, "musicCount": 120 },
+      { "id": "100235", "name": "深夜电台 | 一个人的睡前歌单", "sourceType": 4, "musicCount": 86 },
+      { "id": "100236", "name": "通勤路上的 BGM", "sourceType": 4, "musicCount": 45 },
+      { "id": "100237", "name": "健身房里的肾上腺素", "sourceType": 4, "musicCount": 62 },
+      { "id": "100238", "name": "雨天咖啡馆", "sourceType": 4, "musicCount": 54 },
+      { "id": "100239", "name": "粤语留声机：黄金年代", "sourceType": 4, "musicCount": 98 },
+      { "id": "100240", "name": "民谣与诗：远方和田野", "sourceType": 4, "musicCount": 73 },
+      { "id": "100241", "name": "工作室专注白噪音 + 轻音乐", "sourceType": 4, "musicCount": 40 },
+      { "id": "100242", "name": "KTV 必点金曲合集", "sourceType": 4, "musicCount": 150 },
+      { "id": "100243", "name": "开车必备：公路之歌", "sourceType": 4, "musicCount": 88 }
+    ]
+  }
+}

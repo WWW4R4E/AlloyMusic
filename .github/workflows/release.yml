@@ -1,0 +1,66 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            artifact: alloy-music-x86_64-windows.zip
+            exe: amtui.exe
+          - os: ubuntu-latest
+            artifact: alloy-music-x86_64-linux.tar.gz
+            exe: amtui
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mlugg/setup-zig@v1
+        with:
+          version: 0.17.0
+
+      # 依赖（zigzag）由 build.zig.zon 的 URL+hash 联网拉取，无需本机缓存
+      - name: build (release)
+        run: zig build -Doptimize=ReleaseFast
+
+      - name: package (windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory dist | Out-Null
+          Compress-Archive -Path zig-out/bin/amtui.exe -DestinationPath dist/${{ matrix.artifact }}
+
+      - name: package (linux)
+        if: runner.os == 'Linux'
+        run: |
+          mkdir dist
+          tar -czf dist/${{ matrix.artifact }} -C zig-out/bin amtui
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/${{ matrix.artifact }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
+          path: dist
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true

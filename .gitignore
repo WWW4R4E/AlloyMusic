@@ -1,0 +1,16 @@
+.zig-cache
+zig-pkg
+zig-out
+scratch
+
+.zcode/
+
+# 登录态凭证（cookie/token，敏感）
+auth.json
+
+# 运行产物
+relay_log.txt
+smtcsmoke_tmp.wav
+
+# 构建生成（relay 嵌入字面量）
+src/core/relay_embed.zig

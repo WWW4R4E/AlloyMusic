@@ -1,0 +1,13 @@
+.{
+    .name = .bodian_tui,
+    .version = "0.1.0",
+    .dependencies = .{
+        .zigzag = .{
+            .url = "git+https://github.com/meszmate/zigzag.git#15db0f7e12dd6840307c3062c9c5c4fa851c79d0",
+            .hash = "zigzag-0.1.7-YXwYS8sjEwDBfyibZxgq4YMU-GRXD_qgtePvgGWZF3-g",
+        },
+    },
+    .minimum_zig_version = "0.16.0",
+    .paths = .{""},
+    .fingerprint = 0xbcd7cbdd5185f3ce,
+}
